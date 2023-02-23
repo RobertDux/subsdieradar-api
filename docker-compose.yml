@@ -1,0 +1,42 @@
+version: "3.7"
+services:
+  wl-web-db:
+    image: welabstest/db
+    build:
+      context: ./development/db
+      dockerfile: ../../db.dockerfile
+    container_name: wl-db
+    volumes:
+      - db_data:/var/data/db
+    restart: always
+    ports:
+      - 5432:5432
+    networks: 
+      - wl-web
+    environment:
+      - POSTGRES_USER=subsidie-radar
+      - POSTGRES_PASSWORD=subsidie-radar
+      - DB_APP_NAME=subsidie-radar
+      - DB_APP_USER=subsidie-radar
+      - DB_APP_PASS=subsidie-radar
+  wl-web-backend:
+    image: welabstest/back
+    container_name: wl-back
+    build: 
+      context: .
+      dockerfile: backend.dockerfile
+    restart: always
+    environment:
+      - spring.datasource.url=jdbc:postgresql://wl-db:5432/subsidie-radar
+      - spring.datasource.username=subsidie-radar
+      - spring.datasource.password=subsidie-radar
+    networks:
+      - wl-web
+    ports:
+      - 8081:8081
+
+networks:
+  wl-web:
+
+volumes:
+  db_data:
