@@ -10,7 +10,7 @@ services:
       - db_data:/var/data/db
     restart: always
     ports:
-      - 5432:5432
+      - 127.0.0.1:5432:5432
     networks: 
       - wl-web
     environment:
@@ -33,7 +33,7 @@ services:
     networks:
       - wl-web
     ports:
-      - 8081:8081
+      - 127.0.0.1:8081:8081
 
 networks:
   wl-web:
